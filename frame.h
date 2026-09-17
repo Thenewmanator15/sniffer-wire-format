@@ -85,8 +85,10 @@ typedef enum {
      * a hat, and the host would branch on it exactly as it branches here.
      *
      * A 9-byte header (u64 base timestamp, u8 count) then count entries
-     * of (u16 dt_us, u16 orig_len, u8 flags, u8 len, HCI bytes starting
-     * with the H4 type byte). No channel: BLE advertises on three and the
+     * of (u16 dt_us, u16 orig_len, u8 flags, u16 len, HCI bytes starting
+     * with the H4 type byte). The length is sixteen bits because an HCI
+     * event reaches 258 -- a type byte, a two-byte header, and a parameter
+     * length that is itself only a byte. No channel: BLE advertises on three and the
      * controller rotates them without saying which it heard.
      *
      * Authoritative layout: esp32c6_sniffer/batch.py in the host package. */
