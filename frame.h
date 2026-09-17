@@ -76,6 +76,21 @@ typedef enum {
      * ring was full are already counted in STATS, and counting them here
      * as well would double them in the pcapng statistics. */
     SN_FRAME_LINK = 13,
+
+    /* Several captured BLE packets in one frame. Its own type rather than
+     * a flag on PACKET_BATCH because the two carry different metadata and
+     * always will: an 802.15.4 entry has a channel, an LQI and an RSSI,
+     * and a BLE entry has an HCI packet whose own header carries all of
+     * that. One layout with a discriminator would be two layouts wearing
+     * a hat, and the host would branch on it exactly as it branches here.
+     *
+     * A 9-byte header (u64 base timestamp, u8 count) then count entries
+     * of (u16 dt_us, u16 orig_len, u8 flags, u8 len, HCI bytes starting
+     * with the H4 type byte). No channel: BLE advertises on three and the
+     * controller rotates them without saying which it heard.
+     *
+     * Authoritative layout: esp32c6_sniffer/batch.py in the host package. */
+    SN_FRAME_BLE_BATCH = 14,
 } sn_frame_type_t;
 
 /* CRC-16/CCITT-FALSE: poly 0x1021, init 0xFFFF, no reflection, no final XOR.
