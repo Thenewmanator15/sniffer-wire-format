@@ -93,6 +93,15 @@ typedef enum {
      *
      * Authoritative layout: esp32c6_sniffer/batch.py in the host package. */
     SN_FRAME_BLE_BATCH = 14,
+
+    /* Host to board: identity resolving keys, so the controller reports and
+     * filters a device that changes its address under its fixed identity
+     * address instead. N x 23 bytes -- identity address type (0 public,
+     * 1 random), the identity address, the 16-byte key, both least
+     * significant byte first as HCI carries them. An empty payload clears
+     * the keys. Kept in RAM for one capture and never logged.
+     * Authoritative layout: encode_ble_keys in the host's control.py. */
+    SN_FRAME_BLE_KEYS = 15,
 } sn_frame_type_t;
 
 /* CRC-16/CCITT-FALSE: poly 0x1021, init 0xFFFF, no reflection, no final XOR.
